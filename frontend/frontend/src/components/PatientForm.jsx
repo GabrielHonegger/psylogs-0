@@ -7,6 +7,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDes
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectGroup,
+  SelectLabel
+} from "@/components/ui/select"
 
 
 const nucleos = [
@@ -52,6 +61,14 @@ const formSchema = z.object({
   "budismo", "judaismo", "espiritismo", "taoismo", "ateismo", "outra"], {
     required_error: "Escolha uma opção",
   }),
+  escolaridade: z.enum(["infantil", "ef1", "ef2", 
+  "medio", "tecnico", "superior-incompleto", 
+  "superior-completo", "pos-graduacao", "pos-doutorado"], {
+    required_error: "Escolha uma opção",
+  }),
+  trabalho: z.string().min(1, {
+    message: "Insira a ocupação principal do paciente.",
+  }),
 })
 
 export default function PatientForm() {
@@ -62,6 +79,7 @@ export default function PatientForm() {
       idade: "",
       sexo: undefined,
       nucleos: [],
+      trabalho: ""
     },
   });
 
@@ -209,6 +227,46 @@ export default function PatientForm() {
                     <Label htmlFor="outra">Outra</Label>
                   </div>
                 </RadioGroup>
+              </FormControl>
+              <FormMessage></FormMessage>
+            </FormItem>
+          }} />
+
+          {/* Escolaridade */}
+          <FormField control={form.control} name="escolaridade" render={({field}) => {
+            return <FormItem>
+              <FormLabel htmlFor="escolaridade">Escolaridade</FormLabel>
+              <FormControl>
+              <Select>
+                <SelectTrigger className="w-[180px] w-full">
+                  <SelectValue placeholder="Nível de escolaridade" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Nível de escolaridade</SelectLabel>
+                    <SelectItem value="infantil">Educação Infantil (Pré-escola)</SelectItem>
+                    <SelectItem value="ef1">Ensino Fundamental I</SelectItem>
+                    <SelectItem value="ef2">Ensino Fundamental II</SelectItem>
+                    <SelectItem value="medio">Ensino Médio</SelectItem>
+                    <SelectItem value="tecnico">Ensino Técnico e Profissionalizante</SelectItem>
+                    <SelectItem value="superior-incompleto">Ensino Superior Incompleto</SelectItem>
+                    <SelectItem value="superior-completo">Ensino Superior Completo</SelectItem>
+                    <SelectItem value="pos-graduacao">Pós-Graduação</SelectItem>
+                    <SelectItem value="pos-doutorado">Pós-Doutorado</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              </FormControl>
+              <FormMessage></FormMessage>
+            </FormItem>
+          }} />
+
+          {/* Atividade Laborial */}
+          <FormField control={form.control} name="trabalho" render={({field}) => {
+            return <FormItem>
+              <FormLabel htmlFor="trabalho">Atividade Laboral</FormLabel>
+              <FormControl>
+                <Input placeholder="Ex: Arquiteto" type="text" {...field}/>
               </FormControl>
               <FormMessage></FormMessage>
             </FormItem>
