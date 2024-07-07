@@ -1,0 +1,1 @@
+export { default as IdentificationDataForm } from './IdentificationDataForm'

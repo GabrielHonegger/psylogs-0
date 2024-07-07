@@ -1,12 +1,13 @@
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import React from 'react'
+import { Button } from "./ui/button"
+import { Input } from "./ui/input"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription }  from "@/components/ui/form"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription }  from "./ui/form"
+import { Label } from "./ui/label"
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
+import { Checkbox } from "./ui/checkbox"
 import {
   Select,
   SelectContent,
@@ -15,7 +16,7 @@ import {
   SelectValue,
   SelectGroup,
   SelectLabel
-} from "@/components/ui/select"
+} from "./ui/select"
 
 
 const nucleos = [
@@ -71,7 +72,7 @@ const formSchema = z.object({
   }),
 })
 
-export default function PatientForm() {
+export default function IdentificationDataForm() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -237,8 +238,8 @@ export default function PatientForm() {
             return <FormItem>
               <FormLabel htmlFor="escolaridade">Escolaridade</FormLabel>
               <FormControl>
-              <Select>
-                <SelectTrigger className="w-[180px] w-full">
+              <Select onValueChange={field.onChange}>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Nível de escolaridade" />
                 </SelectTrigger>
                 <SelectContent>
