@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "frontend/index.css" %}">
   </head>
   <body>
+    {% csrf_token %}
     <div id="root"></div>
     <script type="module" src={% static "frontend/dist/new.js" %}></script>
   </body>

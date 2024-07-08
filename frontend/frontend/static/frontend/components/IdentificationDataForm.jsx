@@ -43,28 +43,30 @@ const nucleos = [
 ]
 
 const formSchema = z.object({
-  apelido: z.string().min(1, {
+  nome: z.string().min(1, {
     message: "Nome precisa ter mais 1 caracter.",
   }),
   idade: z.number({
     required_error: "A idade é obrigatória",
-    invalid_type_error: "A idade é obrigatória"
+    invalid_type_error: "Idade inválida"
   }).positive({
     message: "A idade precisa ser um número positivo."
-  }).min(1).max(100),
-  sexo: z.enum(["masculino", "feminino"], {
+  }).min(1).max(120),
+  sexo: z.enum(["M", "F"], {
     required_error: "Escolha uma opção",
   }),
-  nucleos: z.array(z.string()).refine((value) => value.some((nucleo) => nucleo), {
+  nucleos: z.number({
     message: "Você precisa escolher pelo menos um núcleo familiar.",
+    required_error: "Você precisa escolher pelo menos um núcleo familiar.",
+    invalid_type_error: "Opção Inválida"
   }),
-  religiao: z.enum(["cristianismo", "islamismo", "hinduismo", 
-  "budismo", "judaismo", "espiritismo", "taoismo", "ateismo", "outra"], {
+  religiao: z.enum(["C", "I", "H", 
+  "B", "J", "E", "T", "A", "O"], {
     required_error: "Escolha uma opção",
   }),
-  escolaridade: z.enum(["infantil", "ef1", "ef2", 
-  "medio", "tecnico", "superior-incompleto", 
-  "superior-completo", "pos-graduacao", "pos-doutorado"], {
+  escolaridade: z.enum(["INFANTIL", "EF1", "EF2", 
+  "MEDIO", "TECNICO", "SUPERIOR_INCOMPLETO", 
+  "SUPERIOR_COMPLETO", "POS_GRADUACAO", "POS_DOUTORADO", "N/A"], {
     required_error: "Escolha uma opção",
   }),
   trabalho: z.string().min(1, {
@@ -76,16 +78,38 @@ export default function IdentificationDataForm() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      apelido: "",
+      nome: "",
       idade: "",
-      sexo: undefined,
-      nucleos: [],
-      trabalho: ""
+      sexo: "N",
+      nucleos: 0,
+      trabalho: "",
+      escolaridade: "N/A"
     },
   });
 
   const handleSubmit = () => {
-
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    console.log(JSON.stringify(form.getValues()))
+    fetch('http://127.0.0.1:8000/api/create-patient', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken,
+      },
+      body: JSON.stringify(form.getValues())
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error('There was a problem with POST request:', error);
+    })
   }
   return (
     <div className="lg:w-1/3 w-11/12 m-auto flex flex-col gap-6">
@@ -94,9 +118,9 @@ export default function IdentificationDataForm() {
         <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-6">
 
           {/* Nome */}
-          <FormField control={form.control} name="apelido" render={({field}) => {
+          <FormField control={form.control} name="nome" render={({field}) => {
             return <FormItem>
-              <FormLabel htmlFor="apelido">Nome (Apelido ou iniciais)</FormLabel>
+              <FormLabel htmlFor="nome">Nome (Apelido ou iniciais)</FormLabel>
               <FormControl>
                 <Input placeholder="Ex: Ju" type="username" {...field}/>
               </FormControl>
@@ -124,11 +148,11 @@ export default function IdentificationDataForm() {
               <FormControl>
                 <RadioGroup className="flex justify-between w-60" onValueChange={field.onChange} {...field}>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="masculino" id="masculino" />
+                    <RadioGroupItem value="M" id="masculino" />
                     <Label htmlFor="masculino">Masculino</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="feminino" id="feminino" />
+                    <RadioGroupItem value="F" id="feminino" />
                     <Label htmlFor="feminino">Feminino</Label>
                   </div>
                 </RadioGroup>
@@ -137,7 +161,7 @@ export default function IdentificationDataForm() {
             </FormItem>
           }} />
 
-          {/* Núcleo Familiar */}
+          {/* Núcleo Familiar
           <FormField control={form.control} name="nucleos" render={({field}) => {
             return (
               <FormItem>
@@ -183,48 +207,48 @@ export default function IdentificationDataForm() {
               <FormMessage />
             </FormItem>
             )
-          }} />
+          }} />  */}
 
           {/* Religião */}
           <FormField control={form.control} name="religiao" render={({field}) => {
             return <FormItem>
-              <FormLabel htmlFor="sexo">Religião</FormLabel>
+              <FormLabel htmlFor="religiao">Religião</FormLabel>
               <FormControl>
                 <RadioGroup className="grid grid-cols-2	gap-2" onValueChange={field.onChange} {...field}>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="cristianismo" id="cristianismo" />
+                    <RadioGroupItem value="C" id="cristianismo" />
                     <Label htmlFor="cristianismo">Cristianismo</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="islamismo" id="islamismo" />
+                    <RadioGroupItem value="I" id="islamismo" />
                     <Label htmlFor="islamismo">Islamismo</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="hinduismo" id="hinduismo" />
+                    <RadioGroupItem value="H" id="hinduismo" />
                     <Label htmlFor="hinduismo">Hinduísmo</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="budismo" id="budismo" />
+                    <RadioGroupItem value="B" id="budismo" />
                     <Label htmlFor="budismo">Budismo</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="judaismo" id="judaismo" />
+                    <RadioGroupItem value="J" id="judaismo" />
                     <Label htmlFor="judaismo">Judaísmo</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="espiritismo" id="espiritismo" />
+                    <RadioGroupItem value="E" id="espiritismo" />
                     <Label htmlFor="espiritismo">Espiritismo</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="taoismo" id="taoismo" />
+                    <RadioGroupItem value="T" id="taoismo" />
                     <Label htmlFor="taoismo">Taoísmo</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="ateismo" id="ateismo" />
+                    <RadioGroupItem value="A" id="ateismo" />
                     <Label htmlFor="ateismo">Ateísmo</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="outra" id="outra" />
+                    <RadioGroupItem value="O" id="outra" />
                     <Label htmlFor="outra">Outra</Label>
                   </div>
                 </RadioGroup>
@@ -245,15 +269,15 @@ export default function IdentificationDataForm() {
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Nível de escolaridade</SelectLabel>
-                    <SelectItem value="infantil">Educação Infantil (Pré-escola)</SelectItem>
-                    <SelectItem value="ef1">Ensino Fundamental I</SelectItem>
-                    <SelectItem value="ef2">Ensino Fundamental II</SelectItem>
-                    <SelectItem value="medio">Ensino Médio</SelectItem>
-                    <SelectItem value="tecnico">Ensino Técnico e Profissionalizante</SelectItem>
-                    <SelectItem value="superior-incompleto">Ensino Superior Incompleto</SelectItem>
-                    <SelectItem value="superior-completo">Ensino Superior Completo</SelectItem>
-                    <SelectItem value="pos-graduacao">Pós-Graduação</SelectItem>
-                    <SelectItem value="pos-doutorado">Pós-Doutorado</SelectItem>
+                    <SelectItem value="INFANTIL">Educação Infantil (Pré-escola)</SelectItem>
+                    <SelectItem value="EF1">Ensino Fundamental I</SelectItem>
+                    <SelectItem value="EF2">Ensino Fundamental II</SelectItem>
+                    <SelectItem value="MEDIO">Ensino Médio</SelectItem>
+                    <SelectItem value="TECNICO">Ensino Técnico e Profissionalizante</SelectItem>
+                    <SelectItem value="SUPERIOR_INCOMPLETO">Ensino Superior Incompleto</SelectItem>
+                    <SelectItem value="SUPERIOR_COMPLETO">Ensino Superior Completo</SelectItem>
+                    <SelectItem value="POS_GRADUACAO">Pós-Graduação</SelectItem>
+                    <SelectItem value="POS_DOUTORADO">Pós-Doutorado</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
