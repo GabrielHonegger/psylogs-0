@@ -90,7 +90,7 @@ export default function IdentificationDataForm() {
   const handleSubmit = () => {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     console.log(JSON.stringify(form.getValues()))
-    fetch('http://127.0.0.1:8000/api/create-patient', {
+    fetch('/api/create-patient', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
