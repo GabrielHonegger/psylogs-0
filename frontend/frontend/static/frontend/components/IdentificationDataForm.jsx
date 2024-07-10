@@ -54,6 +54,7 @@ const formSchema = z.object({
   }).min(1).max(120),
   sexo: z.enum(["M", "F"], {
     required_error: "Escolha uma opção",
+    message: "Escolha uma opção",
   }),
   nucleos: z.number({
     message: "Você precisa escolher pelo menos um núcleo familiar.",
@@ -94,7 +95,7 @@ export default function IdentificationDataForm() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': csrftoken,
+         'X-CSRFToken': csrftoken,
       },
       body: JSON.stringify(form.getValues())
     })

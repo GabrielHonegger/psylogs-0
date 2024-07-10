@@ -1,11 +1,11 @@
-from django.shortcuts import render
-from rest_framework import generics, status
+from rest_framework import status
 from .models import Patient
 from .serializers import PatientSerializer, CreatePatientSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.generics import ListAPIView
 
-class PatientView(generics.CreateAPIView):
+class PatientListView(ListAPIView):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
 
@@ -35,4 +35,4 @@ class CreatePatientView(APIView):
             patient.save()
 
             return Response(PatientSerializer(patient).data, status=status.HTTP_201_CREATED) 
-
+        return Response({"detail": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)

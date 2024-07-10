@@ -13,16 +13,16 @@ const NavBar = () => {
     <div className='lg:w-1/3 w-11/12 rounded-lg pt-2 pb-2 flex m-auto mb-4 mt-7 bg-slate-800'>
         <NavigationMenu className='w-full m-auto'>
             <NavigationMenuList className='w-full flex justify-end'>
-                <NavigationMenuItem className={`${navigationMenuTriggerStyle()} cursor-pointer text-white bg-transparent`}>
-                    <Link to='/patients'>
-                        Pacientes
-                    </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem className={`${navigationMenuTriggerStyle()} cursor-pointer text-white bg-transparent`}>
-                    <Link to='/'>
-                        Adicionar
-                    </Link>
-                </NavigationMenuItem>
+                <Link to='/patients'>
+                    <NavigationMenuItem className={`${navigationMenuTriggerStyle()} cursor-pointer text-white bg-transparent`}>
+                            Pacientes
+                    </NavigationMenuItem>
+                </Link>
+                <Link to='/'>
+                    <NavigationMenuItem className={`${navigationMenuTriggerStyle()} cursor-pointer text-white bg-transparent`}>
+                            Adicionar
+                    </NavigationMenuItem>
+                </Link>
             </NavigationMenuList>
         </NavigationMenu>
     </div>
