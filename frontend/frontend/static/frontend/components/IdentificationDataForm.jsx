@@ -44,7 +44,7 @@ const nucleos = [
 
 const formSchema = z.object({
   nome: z.string().min(1, {
-    message: "Nome precisa ter mais 1 caracter.",
+    message: "Nome precisa ter mais de 1 caracter.",
   }),
   idade: z.number({
     required_error: "A idade é obrigatória",
@@ -123,7 +123,7 @@ export default function IdentificationDataForm() {
             return <FormItem>
               <FormLabel htmlFor="nome">Nome (Apelido ou iniciais)</FormLabel>
               <FormControl>
-                <Input placeholder="Ex: Ju" type="username" {...field}/>
+                <Input placeholder="Ex: Ju" id="nome" type="username" {...field}/>
               </FormControl>
               <FormMessage></FormMessage>
             </FormItem>
@@ -134,7 +134,7 @@ export default function IdentificationDataForm() {
             return <FormItem>
               <FormLabel htmlFor="idade">Idade</FormLabel>
               <FormControl>
-                <Input className="w-32" placeholder="Ex: 38" type="number" {...field}
+                <Input className="w-32" id="idade" placeholder="Ex: 38" type="number" {...field}
                 value={field.value || ''} // Ensure value is a string (React expects this)
                 onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : '')}/>
               </FormControl>
@@ -215,7 +215,7 @@ export default function IdentificationDataForm() {
             return <FormItem>
               <FormLabel htmlFor="religiao">Religião</FormLabel>
               <FormControl>
-                <RadioGroup className="grid grid-cols-2	gap-2" onValueChange={field.onChange} {...field}>
+                <RadioGroup id="religiao" className="grid grid-cols-2	gap-2" onValueChange={field.onChange} {...field}>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="C" id="cristianismo" />
                     <Label htmlFor="cristianismo">Cristianismo</Label>
@@ -263,7 +263,7 @@ export default function IdentificationDataForm() {
             return <FormItem>
               <FormLabel htmlFor="escolaridade">Escolaridade</FormLabel>
               <FormControl>
-              <Select onValueChange={field.onChange}>
+              <Select id={field.name} onValueChange={field.onChange}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Nível de escolaridade" />
                 </SelectTrigger>
@@ -292,7 +292,7 @@ export default function IdentificationDataForm() {
             return <FormItem>
               <FormLabel htmlFor="trabalho">Atividade Laboral</FormLabel>
               <FormControl>
-                <Input placeholder="Ex: Arquiteto" type="text" {...field}/>
+                <Input placeholder="Ex: Arquiteto" id="trabalho" type="text" {...field}/>
               </FormControl>
               <FormMessage></FormMessage>
             </FormItem>

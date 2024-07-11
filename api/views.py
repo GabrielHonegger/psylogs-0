@@ -1,9 +1,29 @@
 from rest_framework import status
 from .models import Patient
-from .serializers import PatientSerializer, CreatePatientSerializer
+from .serializers import PatientSerializer, CreatePatientSerializer, UserSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
+from django.contrib.auth import login, authenticate
+
+@api_view(['POST'])
+def register(request):
+    serializer = UserSerializer(data=request.data)
+
+    if serializer.is_valid():
+       user = serializer.save()
+       login(request, user)
+       return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CheckAuthenticationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        authenticated = request.user.is_authenticated
+        return Response({'authenticated': authenticated})
 
 class PatientListView(ListAPIView):
     queryset = Patient.objects.all()

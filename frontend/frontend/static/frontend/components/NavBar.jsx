@@ -23,6 +23,11 @@ const NavBar = () => {
                             Adicionar
                     </NavigationMenuItem>
                 </Link>
+                <Link to='/login'>
+                    <NavigationMenuItem className={`${navigationMenuTriggerStyle()} cursor-pointer text-white bg-transparent`}>
+                            Log out
+                    </NavigationMenuItem>
+                </Link>
             </NavigationMenuList>
         </NavigationMenu>
     </div>
